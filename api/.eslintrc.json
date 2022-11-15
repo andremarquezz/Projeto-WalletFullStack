@@ -1,0 +1,17 @@
+{
+  "env": {
+    "commonjs": true,
+    "es2021": true,
+    "node": true
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": "airbnb-base",
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "@typescript-eslint/interface-name-prefix": 0,
+    "no-useless-constructor": "off"
+  }
+}
