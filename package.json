@@ -1,0 +1,20 @@
+{
+  "name": "ngcash",
+  "version": "1.0.0",
+  "description": "Desafio Tecnico NgCash",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andremarquezz/Desafio-NgCash.git"
+  },
+  "keywords": [],
+  "author": "André Marquez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andremarquezz/Desafio-NgCash/issues"
+  },
+  "homepage": "https://github.com/andremarquezz/Desafio-NgCash#readme"
+}
