@@ -13,9 +13,11 @@ services:
     environment:
       - JWT_SECRET=secret_key
       - APP_PORT=3001
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=databaseNgCash
+      - DB_USER=root
+      - DB_PASS=123456
+      - DB_HOST=localhost
+      - DB_DATABASE=ngcash_db
+      - DB_PORT=5432
     ports:
       - 3001:3001
   ngcash_db: 
