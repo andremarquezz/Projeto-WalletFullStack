@@ -4,8 +4,8 @@
   "description": "Api para o desafio tecnico NgCash",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/index.js",
-    "dev": "nodemon ./src/index.js",
+    "start": "node /src/server.ts",
+    "dev": "nodemon /src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -23,6 +23,7 @@
     "eslint-plugin-n": "^15.5.1",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
+    "nodemon": "^2.0.20",
     "prettier": "^2.7.1",
     "typescript": "^4.8.4"
   },
