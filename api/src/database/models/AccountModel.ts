@@ -1,0 +1,32 @@
+import { Model, INTEGER, DECIMAL } from 'sequelize';
+
+import db from '.';
+import Users from './UserModel';
+
+class Accounts extends Model {
+  id!: number;
+
+  balance!: string;
+
+}
+
+Accounts.init(
+  {
+    id: {
+      type: INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    balance: {
+      type: DECIMAL(10, 2),
+      defaultValue: 100,
+    },
+  },
+  {
+    sequelize: db,
+    modelName: 'accounts',
+    timestamps: false,
+  }
+);
+export default Accounts;
