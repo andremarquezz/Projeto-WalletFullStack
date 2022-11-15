@@ -1,7 +1,6 @@
 import { Model, INTEGER, DECIMAL } from 'sequelize';
 
 import db from '.';
-import Users from './UserModel';
 
 class Accounts extends Model {
   id!: number;
