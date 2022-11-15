@@ -1,35 +1,31 @@
 version: "3.9"
 services: 
   api:
-    container_name: backEnd_ngCash
+    container_name: backend_ngcash
     build: ./api
     working_dir: /app-backend
     volumes:
       - ./api:/app-backend
     depends_on:
-      ngcash_db:
-        condition: service_healthy
+      - ngcash_db
+    command: npm run dev
     restart: 'unless-stopped'
     environment:
       - JWT_SECRET=secret_key
       - APP_PORT=3001
-      - MYSQL_HOST=login_db
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=123456
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=databaseNgCash
     ports:
       - 3001:3001
   ngcash_db: 
-    container_name: database_ngCash
+    container_name: database_ngcash
     image: postgres:10.17
     restart: 'unless-stopped'
-    healthcheck:
-      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost'] # Deve aguardar o banco ficar operacional
-      timeout: 10s
-      retries: 5
     environment:
     - POSTGRES_USER=root
     - POSTGRES_PASSWORD=123456
-    - POSTGRES_DB=databaseNgCash
+    - POSTGRES_DB=ngcash_db
     ports:
       - 5432:5432
    
