@@ -7,7 +7,7 @@ services:
     volumes:
       - ./api:/app-backend
     depends_on:
-      - ngcash_db
+      - db
     command: npm run dev
     restart: 'unless-stopped'
     environment:
@@ -15,13 +15,13 @@ services:
       - APP_PORT=3001
       - DB_USER=root
       - DB_PASS=123456
-      - DB_HOST=localhost
+      - DB_HOST=db
       - DB_DATABASE=ngcash_db
       - DB_PORT=5432
     ports:
       - 3001:3001
-  ngcash_db: 
-    container_name: database_ngcash
+  db: 
+    container_name: db_ngcash
     image: postgres:10.17
     restart: 'unless-stopped'
     environment:
