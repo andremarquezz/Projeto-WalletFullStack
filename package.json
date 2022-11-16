@@ -16,5 +16,6 @@
   "bugs": {
     "url": "https://github.com/andremarquezz/Desafio-NgCash/issues"
   },
-  "homepage": "https://github.com/andremarquezz/Desafio-NgCash#readme"
+  "homepage": "https://github.com/andremarquezz/Desafio-NgCash#readme",
+  "dependencies": {}
 }

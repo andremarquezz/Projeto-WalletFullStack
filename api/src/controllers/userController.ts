@@ -10,7 +10,7 @@ const userController = {
   },
   register: async (req: Request, res: Response): Promise<void> => {
     const { username, password }: ILoginInfo = req.body;
-    const token = await userService.login({ username, password });
+    const token = await userService.register({ username, password });
     res.status(201).json({ token });
   },
 };
