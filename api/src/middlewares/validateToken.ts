@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import ErrorUnauthorized from '../errors/ErrorUnauthorized';
 import UserModel from '../database/models/UserModel';
 import IResponseToken from '../interfaces/IResponseToken';
-import IInfoToken from '../interfaces/IInfoToken';
+import IInfoUser from '../interfaces/IInfoUser';
 
 const { JWT_SECRET } = process.env;
 
@@ -12,7 +12,7 @@ const validateToken = async (req: Request, res: IResponseToken, next: NextFuncti
   if (!token) throw new ErrorUnauthorized('token not found');
 
   try {
-    const { accountId, userId } = jwt.verify(token, JWT_SECRET as string) as IInfoToken;
+    const { accountId, userId } = jwt.verify(token, JWT_SECRET as string) as IInfoUser;
     const user = await UserModel.findOne({
       where: { id: userId },
     });

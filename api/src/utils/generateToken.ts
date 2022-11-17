@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import 'express-async-errors';
-import IInfoToken from '../interfaces/IInfoToken';
+import IInfoUser from '../interfaces/IInfoUser';
 
 const jwtConfig: jwt.SignOptions = {
   expiresIn: '24h',
@@ -9,7 +9,7 @@ const jwtConfig: jwt.SignOptions = {
 
 const { JWT_SECRET } = process.env;
 
-const generateToken = async (infoUser: IInfoToken): Promise<string> => {
+const generateToken = async (infoUser: IInfoUser): Promise<string> => {
   return jwt.sign(infoUser, JWT_SECRET as string, jwtConfig);
 };
 

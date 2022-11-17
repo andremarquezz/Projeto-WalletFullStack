@@ -1,4 +1,4 @@
-export default interface IInfoToken {
+export default interface IInfoUser {
   accountId: number;
   userId: number;
 }
