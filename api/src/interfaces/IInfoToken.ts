@@ -1,4 +1,4 @@
 export default interface IInfoToken {
-  username: string;
+  accountId: number;
   userId: number;
 }

@@ -20,11 +20,12 @@ const userService = {
 
     const userDbPassword = userDb.getDataValue('password');
     const userId = userDb.getDataValue('id');
+    const accountId = userDb.getDataValue('accountId');
 
     const validPassword = bcrypt.compareSync(password, userDbPassword);
     if (!validPassword) throw new ErrorUnauthorized('Incorrect password');
 
-    return generateToken({ username, userId });
+    return generateToken({ accountId, userId });
   },
 
   register: async ({ username, password }: ILoginInfo): Promise<string> => {
@@ -46,7 +47,9 @@ const userService = {
         return user;
       });
 
-      return generateToken({ username, userId: dataValues.id });
+      const {accountId, id} = dataValues;
+
+      return generateToken({ accountId, userId: id });
     } catch (error) {
       throw new ErrorBadRequest('Error to register user');
     }

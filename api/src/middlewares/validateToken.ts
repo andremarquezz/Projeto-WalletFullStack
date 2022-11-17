@@ -12,15 +12,15 @@ const validateToken = async (req: Request, res: IResponseToken, next: NextFuncti
   if (!token) throw new ErrorUnauthorized('token not found');
 
   try {
-    const { username, userId } = jwt.verify(token, JWT_SECRET as string) as IInfoToken;
+    const { accountId, userId } = jwt.verify(token, JWT_SECRET as string) as IInfoToken;
     const user = await UserModel.findOne({
-      where: { username },
+      where: { id: userId },
     });
 
     if (!user) {
       throw new ErrorUnauthorized('User not found');
     }
-    res.locals.user = { username, userId };
+    res.locals.user = { accountId, userId };
     next();
   } catch (error) {
     throw new ErrorUnauthorized('Token must be a valid token');
