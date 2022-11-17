@@ -7,7 +7,7 @@
     "start": "npm run build && node ./build/server.js",
     "dev": "npm run build && tsnd ./src/server.ts",
     "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
-    "build": "npx tsc && db:reset",
+    "build": "npx tsc && npm run db:reset",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

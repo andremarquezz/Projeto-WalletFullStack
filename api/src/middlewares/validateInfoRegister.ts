@@ -31,7 +31,7 @@ const validateInfoRegister = async (
 
   if (!passwordValid)
     throw new ErrorBadRequest(
-      'The password must have at least one uppercase, lowercase letter and one number'
+      'The password must have at least one uppercase, lowercase letter and number'
     );
 
   next();

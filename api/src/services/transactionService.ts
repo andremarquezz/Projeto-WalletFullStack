@@ -29,7 +29,7 @@ const transactionService = {
     accountId,
   }: IInfoUser): Promise<IResponseTransaction[] | null> => {
     const transactions = await TransactionModel.findAll({
-      where: { debitedAccountId: accountId },
+      where: { creditedAccountId: accountId },
     });
     return transactions;
   },
@@ -38,7 +38,7 @@ const transactionService = {
     accountId,
   }: IInfoUser): Promise<IResponseTransaction[] | null> => {
     const transactions = await TransactionModel.findAll({
-      where: { creditedAccountId: accountId },
+      where: { debitedAccountId: accountId },
     });
     return transactions;
   },
@@ -63,7 +63,7 @@ const transactionService = {
     const accountCashOut = await accountService.getBalance(userCashOut);
 
     if (Number(accountCashOut?.balance) < value) {
-      throw new ErrorUnauthorized('balance insufficient');
+      throw new ErrorUnauthorized('Balance insufficient');
     }
 
     return accountCashOut;
@@ -100,8 +100,8 @@ const transactionService = {
         );
         return TransactionModel.create(
           {
-            debitedAccountId: accountCashIn?.id,
-            creditedAccountId: accountCashOut?.id,
+            debitedAccountId: accountCashOut?.id,
+            creditedAccountId: accountCashIn?.id,
             value: infoTransaction.value,
           },
           { transaction: t }
