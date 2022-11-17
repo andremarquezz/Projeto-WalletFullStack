@@ -46,9 +46,7 @@ const userService = {
         return user;
       });
 
-      const { username, id } = dataValues;
-
-      return generateToken({ username, userId: id });
+      return generateToken({ username, userId: dataValues.id });
     } catch (error) {
       throw new ErrorBadRequest('Error to register user');
     }
