@@ -4,9 +4,9 @@ import AccountModel from '../database/models/AccountModel';
 import ErrorUnauthorized from '../errors/ErrorUnauthorized';
 import generateToken from '../utils/generateToken';
 import bcrypt from 'bcryptjs';
-import ErrorBadRequest from '../errors/ErrorBadRequest';
 import sequelize from '../database/models';
 import IUserCreated from '../interfaces/IUserCreated';
+import ErrorInternalServer from '../errors/ErrorInternalServer';
 
 const userService = {
   login: async ({ username, password }: ILoginInfo): Promise<string> => {
@@ -51,7 +51,7 @@ const userService = {
 
       return generateToken({ accountId, userId: id });
     } catch (error) {
-      throw new ErrorBadRequest('Error to register user');
+      throw new ErrorInternalServer('Error to register user');
     }
   },
 };

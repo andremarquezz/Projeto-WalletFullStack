@@ -11,7 +11,7 @@ const validateInfoRegister = async (
   req: Request,
   _res: IResponseToken,
   next: NextFunction
-) => {
+): Promise<void> => {
   const { username, password }: ILoginInfo = req.body;
 
   if (username.length < MIN_CHARACTER_USER)
