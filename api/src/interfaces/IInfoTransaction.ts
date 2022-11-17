@@ -1,4 +1,4 @@
-export default interface ITransaction {
+export default interface IInfoTransaction {
   userCashIn: string;
   value: number;
   user: {
