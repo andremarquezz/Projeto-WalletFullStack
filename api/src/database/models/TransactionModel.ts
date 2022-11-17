@@ -34,6 +34,7 @@ Transactions.init(
     createdAt: {
       type: DATE,
       allowNull: false,
+      defaultValue: new Date
     },
   },
   {
@@ -43,12 +44,11 @@ Transactions.init(
   }
 );
 
-Transactions.hasMany(Accounts, {
+Accounts.hasMany(Transactions, {
   foreignKey: 'debitedAccountId',
 });
-Transactions.hasMany(Accounts, {
+Accounts.hasMany(Transactions, {
   foreignKey: 'creditedAccountId',
 });
-Accounts.belongsTo(Transactions);
 
 export default Transactions;
