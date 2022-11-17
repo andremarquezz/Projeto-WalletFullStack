@@ -12,8 +12,8 @@ const validateInfoRegister = async (
   _res: IResponseToken,
   next: NextFunction
 ) => {
-  const { username, password }: ILoginInfo = req.body
-  
+  const { username, password }: ILoginInfo = req.body;
+
   if (username.length < MIN_CHARACTER_USER)
     throw new ErrorBadRequest('username must be at least 3 characters');
   if (password.length < MIN_CHARACTER_PASS)
@@ -25,9 +25,16 @@ const validateInfoRegister = async (
   });
   if (userExists) throw new ErrorBadRequest('username already exists');
 
-  // verificar senha com regex
+  const regex = /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}/gm;
 
-  next()
+  const passwordValid = regex.test(password);
+
+  if (!passwordValid)
+    throw new ErrorBadRequest(
+      'The password must have at least one uppercase, lowercase letter and one number'
+    );
+
+  next();
 };
 
 export default validateInfoRegister;
