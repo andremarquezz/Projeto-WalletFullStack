@@ -7,6 +7,7 @@ import bcrypt from 'bcryptjs';
 import sequelize from '../database/models';
 import IUserCreated from '../interfaces/IUserCreated';
 import ErrorInternalServer from '../errors/ErrorInternalServer';
+import ErrorBadRequest from '../errors/ErrorBadRequest';
 
 const userService = {
   login: async ({ username, password }: ILoginInfo): Promise<string> => {
@@ -16,7 +17,7 @@ const userService = {
       },
     });
 
-    if (!userDb) throw new ErrorUnauthorized('Incorrect username');
+    if (!userDb) throw new ErrorBadRequest('Incorrect username');
 
     const userDbPassword = userDb.getDataValue('password');
     const userId = userDb.getDataValue('id');
