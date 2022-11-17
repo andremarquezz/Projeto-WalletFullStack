@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('Accounts', {
+    await queryInterface.createTable('accounts', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,13 +11,13 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       balance: {
-        type: Sequelize.DECIMAL(10, 2), 
+        type: Sequelize.DECIMAL(10, 2),
         defaultValue: 100,
       },
     });
   },
 
   async down (queryInterface, Sequelize) {
-   await queryInterface.dropTable('Accounts');
+   await queryInterface.dropTable('accounts');
   }
 };

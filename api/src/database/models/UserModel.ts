@@ -41,12 +41,12 @@ Users.init(
   }
 );
 
-Users.hasOne(Accounts, {
+Accounts.hasOne(Users, {
   foreignKey: 'accountId',
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE',
 });
 
-Accounts.belongsTo(Users);
+Users.belongsTo(Accounts);
 
 export default Users;

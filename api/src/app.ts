@@ -5,6 +5,9 @@ import userRoutes from './routes/userRoutes';
 
 const app = express();
 
+app.use('/health', (req: Request, res: Response): void => {
+  res.status(200).json({ message: 'message' });
+});
 app.use(express.json());
 app.use(userRoutes);
 

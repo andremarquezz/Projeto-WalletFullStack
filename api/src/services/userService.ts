@@ -5,6 +5,8 @@ import ErrorUnauthorized from '../errors/ErrorUnauthorized';
 import generateToken from '../utils/generateToken';
 import bcrypt from 'bcryptjs';
 import ErrorBadRequest from '../errors/ErrorBadRequest';
+import sequelize from '../database/models';
+import IUserCreated from '../interfaces/IUserCreated';
 
 const userService = {
   login: async ({ username, password }: ILoginInfo): Promise<string> => {
@@ -28,19 +30,28 @@ const userService = {
   register: async ({ username, password }: ILoginInfo): Promise<string> => {
     const salt = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync(password, salt);
+    try {
+      const { dataValues } = await sequelize.transaction(async (t) => {
+        const account = await AccountModel.create({ balance: 100 }, { transaction: t });
+        const accountId = account.getDataValue('id');
 
-    const user = await UserModel.create({
-      username,
-      password: passwordHash,
-    });
-    if (!user) throw new ErrorBadRequest('Error to register user');
+        const user: IUserCreated = await UserModel.create(
+          {
+            username,
+            password: passwordHash,
+            accountId,
+          },
+          { transaction: t }
+        );
+        return user;
+      });
 
-    const userId = user.getDataValue('id');
-    await AccountModel.create({
-      id: userId,
-    })
-  
-    return generateToken({ username, userId });
+      const { username, id } = dataValues;
+
+      return generateToken({ username, userId: id });
+    } catch (error) {
+      throw new ErrorBadRequest('Error to register user');
+    }
   },
 };
 

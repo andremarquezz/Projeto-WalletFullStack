@@ -27,7 +27,7 @@ services:
     environment:
     - POSTGRES_USER=root
     - POSTGRES_PASSWORD=123456
-    - POSTGRES_DB=ngcash_db
+    - POSTGRES_DB=ngcash_db 
     ports:
       - 5432:5432
    
