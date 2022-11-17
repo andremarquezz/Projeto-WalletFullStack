@@ -5,6 +5,7 @@ import validateToken from '../middlewares/validateToken';
 const router = Router();
 
 router.get('/account', validateToken, accountController.getBalance)
+router.post('/transaction', validateToken, accountController.transaction);
 
 
 
