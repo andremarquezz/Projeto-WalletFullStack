@@ -2,7 +2,7 @@ import IInfoUser from '../interfaces/IInfoUser';
 import AccountModel from '../database/models/AccountModel';
 import UserModel from '../database/models/UserModel';
 import TransactionModel from '../database/models/TransactionModel';
-import ITransaction from '../interfaces/ITransaction';
+import IInfoTransaction from '../interfaces/IInfoTransaction';
 import sequelize from '../database/models';
 import ErrorUnauthorized from '../errors/ErrorUnauthorized';
 import ErrorBadRequest from '../errors/ErrorBadRequest';
@@ -10,10 +10,36 @@ import ErrorConflict from '../errors/ErrorConflict';
 import ErrorInternalServer from '../errors/ErrorInternalServer';
 import IResponseAccount from '../interfaces/IResponseAccount';
 import accountService from './accountService';
+import { Op } from 'sequelize';
+import IResponseTransaction from '../interfaces/IResponseTransaction';
 
 const transactionService = {
-  getTransactions: async (user: IInfoUser) => {
-    const transactions = await AccountModel.findByPk(user.accountId);
+  getTransactions: async ({
+    accountId,
+  }: IInfoUser): Promise<IResponseTransaction[] | null> => {
+    const transactions = await TransactionModel.findAll({
+      where: {
+        [Op.or]: [{ debitedAccountId: accountId }, { creditedAccountId: accountId }],
+      },
+    });
+    return transactions;
+  },
+
+  getTransactionsCashIn: async ({
+    accountId,
+  }: IInfoUser): Promise<IResponseTransaction[] | null> => {
+    const transactions = await TransactionModel.findAll({
+      where: { debitedAccountId: accountId },
+    });
+    return transactions;
+  },
+
+  getTransactionsCashOut: async ({
+    accountId,
+  }: IInfoUser): Promise<IResponseTransaction[] | null> => {
+    const transactions = await TransactionModel.findAll({
+      where: { creditedAccountId: accountId },
+    });
     return transactions;
   },
 
@@ -21,7 +47,7 @@ const transactionService = {
     userCashIn,
     user: userCashOut,
     value,
-  }: ITransaction): Promise<IResponseAccount | null> => {
+  }: IInfoTransaction): Promise<IResponseAccount | null> => {
     const userToReceive = await UserModel.findOne({
       where: {
         username: userCashIn,
@@ -50,9 +76,11 @@ const transactionService = {
 
     return AccountModel.findByPk(user?.accountId);
   },
-  createTransaction: async (infoTransaction: ITransaction) => {
+  createTransaction: async (infoTransaction: IInfoTransaction) => {
     const accountCashOut = await transactionService.handleCashOut(infoTransaction);
-    const accountCashIn = await transactionService.handleCashIn(infoTransaction.userCashIn);
+    const accountCashIn = await transactionService.handleCashIn(
+      infoTransaction.userCashIn
+    );
 
     try {
       const transaction = await sequelize.transaction(async (t) => {

@@ -3,9 +3,21 @@ import IResponseToken from '../interfaces/IResponseToken';
 import transactionService from '../services/transactionService';
 
 const transactionController = {
-  getTransactions: async (_req: Request, res: IResponseToken) => {
+  getTransactionsAll: async (_req: Request, res: IResponseToken) => {
     const { user } = res.locals;
     const transactions = await transactionService.getTransactions(user);
+    res.status(200).json(transactions);
+  },
+
+  getTransactionsCashIn: async (_req: Request, res: IResponseToken) => {
+    const { user } = res.locals;
+    const transactions = await transactionService.getTransactionsCashIn(user);
+    res.status(200).json(transactions);
+  },
+
+  getTransactionsCashOut: async (_req: Request, res: IResponseToken) => {
+    const { user } = res.locals;
+    const transactions = await transactionService.getTransactionsCashOut(user);
     res.status(200).json(transactions);
   },
 
