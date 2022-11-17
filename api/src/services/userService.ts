@@ -1,37 +1,47 @@
 import ILoginInfo from '../interfaces/ILoginInfo';
 import UserModel from '../database/models/UserModel';
 import AccountModel from '../database/models/AccountModel';
-import ErrorUnauthorized from '../errors/ErrorUnauthorized';
 import generateToken from '../utils/generateToken';
-import bcrypt from 'bcryptjs';
 import sequelize from '../database/models';
 import IUserCreated from '../interfaces/IUserCreated';
 import ErrorInternalServer from '../errors/ErrorInternalServer';
 import ErrorBadRequest from '../errors/ErrorBadRequest';
+import ErrorNotFound from '../errors/ErrorNotFound';
+import { compare, hashPassword } from '../utils/hashPassword';
 
 const userService = {
   login: async ({ username, password }: ILoginInfo): Promise<string> => {
+    if (!username || !password) {
+      throw new ErrorBadRequest('username and password is required');
+    }
     const userDb = await UserModel.findOne({
       where: {
         username,
       },
     });
 
-    if (!userDb) throw new ErrorBadRequest('Incorrect username');
+    if (!userDb) throw new ErrorNotFound('Incorrect username');
 
     const userDbPassword = userDb.getDataValue('password');
     const userId = userDb.getDataValue('id');
     const accountId = userDb.getDataValue('accountId');
 
-    const validPassword = bcrypt.compareSync(password, userDbPassword);
-    if (!validPassword) throw new ErrorUnauthorized('Incorrect password');
+    const validPassword = compare(password, userDbPassword);
+    if (!validPassword) throw new ErrorBadRequest('Incorrect password');
 
     return generateToken({ accountId, userId });
   },
 
   register: async ({ username, password }: ILoginInfo): Promise<string> => {
-    const salt = bcrypt.genSaltSync(10);
-    const passwordHash = bcrypt.hashSync(password, salt);
+    console.log('chegou');
+
+    if (!username || !password) {
+      throw new ErrorBadRequest('username and password is required');
+    }
+
+    console.log('passou');
+
+    const hashedPassword = hashPassword(password);
     try {
       const { dataValues } = await sequelize.transaction(async (t) => {
         const account = await AccountModel.create({ balance: 100 }, { transaction: t });
@@ -40,7 +50,7 @@ const userService = {
         const user: IUserCreated = await UserModel.create(
           {
             username,
-            password: passwordHash,
+            password: hashedPassword,
             accountId,
           },
           { transaction: t }
@@ -48,7 +58,7 @@ const userService = {
         return user;
       });
 
-      const {accountId, id} = dataValues;
+      const { accountId, id } = dataValues;
 
       return generateToken({ accountId, userId: id });
     } catch (error) {
