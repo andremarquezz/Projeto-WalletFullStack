@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { Op, Transaction } from 'sequelize';
 import IUserId from '../interfaces/IUserId';
 import AccountModel from '../database/models/AccountModel';
 import UserModel from '../database/models/UserModel';
@@ -12,6 +12,7 @@ import ErrorInternalServer from '../errors/ErrorInternalServer';
 import IResponseAccount from '../interfaces/IResponseAccount';
 import accountService from './accountService';
 import IResponseTransaction from '../interfaces/IResponseTransaction';
+import ITransaction from '../interfaces/ITransaction';
 
 const transactionService = {
   getTransactions: async ({
@@ -43,7 +44,7 @@ const transactionService = {
     return transactions;
   },
 
-  handleCashOut: async ({
+  handleAccountCashOut: async ({
     userCashIn,
     user: userCashOut,
     value,
@@ -68,7 +69,7 @@ const transactionService = {
 
     return accountCashOut;
   },
-  handleCashIn: async (userCashIn: string) => {
+  handleAccountCashIn: async (userCashIn: string): Promise<IResponseAccount | null> => {
     const user = await UserModel.findOne({
       where: { username: userCashIn },
       attributes: ['accountId'],
@@ -76,38 +77,53 @@ const transactionService = {
 
     return AccountModel.findByPk(user?.accountId);
   },
-  createTransaction: async (infoTransaction: IInfoTransaction) => {
-    const accountCashOut = await transactionService.handleCashOut(infoTransaction);
-    const accountCashIn = await transactionService.handleCashIn(
-      infoTransaction.userCashIn
-    );
 
+  handleDebited: async ({
+    infoTransaction,
+    t,
+  }: ITransaction): Promise<IResponseAccount | null> => {
+    const accountCashOut = await transactionService.handleAccountCashOut(infoTransaction);
+    await accountCashOut?.decrement(
+      {
+        balance: infoTransaction.value,
+      },
+      {
+        transaction: t,
+      },
+    );
+    return accountCashOut;
+  },
+
+  handleCredited: async ({
+    infoTransaction,
+    t,
+  }: ITransaction): Promise<IResponseAccount | null> => {
+    const accountCashIn = await transactionService.handleAccountCashIn(
+      infoTransaction.userCashIn,
+    );
+    await accountCashIn?.increment(
+      {
+        balance: infoTransaction.value,
+      },
+      { transaction: t },
+    );
+    return accountCashIn;
+  },
+
+  createTransaction: async (infoTransaction: IInfoTransaction) => {
     try {
-      const transaction = await sequelize.transaction(async (t) => {
-        await accountCashOut?.decrement(
-          {
-            balance: infoTransaction.value,
-          },
-          {
-            transaction: t,
-          }
-        );
-        await accountCashIn?.increment(
-          {
-            balance: infoTransaction.value,
-          },
-          { transaction: t }
-        );
-        return TransactionModel.create(
+      const transaction = await sequelize.transaction(async (t: Transaction) => {
+        const accountCashOut = await transactionService.handleDebited({ infoTransaction, t });
+        const accountCashIn = await transactionService.handleCredited({ infoTransaction, t });
+        TransactionModel.create(
           {
             debitedAccountId: accountCashOut?.id,
             creditedAccountId: accountCashIn?.id,
             value: infoTransaction.value,
           },
-          { transaction: t }
+          { transaction: t },
         );
       });
-
       return transaction;
     } catch (error) {
       throw new ErrorInternalServer('Error when performing transaction');
