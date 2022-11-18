@@ -13,7 +13,7 @@
   "servers": [
     {
       "url": "https://localhost:3001",
-      "description": "API de produção"
+      "description": "API"
     }
   ],
   "paths": {

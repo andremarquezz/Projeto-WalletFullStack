@@ -4,7 +4,7 @@ import IResponseAccount from '../interfaces/IResponseAccount';
 
 const accountService = {
   getBalance: async (user: IInfoUser): Promise<IResponseAccount | null> => {
-    const balance = await AccountModel.findByPk(user.accountId);
+    const balance = await AccountModel.findByPk(user.userId);
     return balance;
   },
 };

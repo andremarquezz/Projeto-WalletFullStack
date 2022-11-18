@@ -24,12 +24,11 @@ const userService = {
 
     const userDbPassword = userDb.getDataValue('password');
     const userId = userDb.getDataValue('id');
-    const accountId = userDb.getDataValue('accountId');
 
     const validPassword = compare(password, userDbPassword);
     if (!validPassword) throw new ErrorBadRequest('Incorrect password');
 
-    return generateToken({ accountId, userId });
+    return generateToken({ userId });
   },
 
   register: async ({ username, password }: ILoginInfo): Promise<string> => {
@@ -50,9 +49,9 @@ const userService = {
         return user;
       });
 
-      const { accountId, id } = dataValues;
+      const { id } = dataValues;
 
-      return generateToken({ accountId, userId: id });
+      return generateToken({ userId: id });
     } catch (error) {
       throw new ErrorInternalServer('Error to register user');
     }

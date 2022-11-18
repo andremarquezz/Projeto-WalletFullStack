@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import IInfoUser from '../interfaces/IInfoUser';
 import AccountModel from '../database/models/AccountModel';
 import UserModel from '../database/models/UserModel';
@@ -10,35 +11,34 @@ import ErrorConflict from '../errors/ErrorConflict';
 import ErrorInternalServer from '../errors/ErrorInternalServer';
 import IResponseAccount from '../interfaces/IResponseAccount';
 import accountService from './accountService';
-import { Op } from 'sequelize';
 import IResponseTransaction from '../interfaces/IResponseTransaction';
 
 const transactionService = {
   getTransactions: async ({
-    accountId,
+    userId,
   }: IInfoUser): Promise<IResponseTransaction[] | null> => {
     const transactions = await TransactionModel.findAll({
       where: {
-        [Op.or]: [{ debitedAccountId: accountId }, { creditedAccountId: accountId }],
+        [Op.or]: [{ debitedAccountId: userId }, { creditedAccountId: userId }],
       },
     });
     return transactions;
   },
 
   getTransactionsCashIn: async ({
-    accountId,
+    userId,
   }: IInfoUser): Promise<IResponseTransaction[] | null> => {
     const transactions = await TransactionModel.findAll({
-      where: { creditedAccountId: accountId },
+      where: { creditedAccountId: userId },
     });
     return transactions;
   },
 
   getTransactionsCashOut: async ({
-    accountId,
+    userId,
   }: IInfoUser): Promise<IResponseTransaction[] | null> => {
     const transactions = await TransactionModel.findAll({
-      where: { debitedAccountId: accountId },
+      where: { debitedAccountId: userId },
     });
     return transactions;
   },
@@ -56,7 +56,7 @@ const transactionService = {
 
     if (!userToReceive) throw new ErrorBadRequest('User does not exist');
 
-    if (userToReceive.accountId === userCashOut.accountId) {
+    if (userToReceive.id === userCashOut.userId) {
       throw new ErrorConflict('It is not possible to transfer to the same account');
     }
 
@@ -79,7 +79,7 @@ const transactionService = {
   createTransaction: async (infoTransaction: IInfoTransaction) => {
     const accountCashOut = await transactionService.handleCashOut(infoTransaction);
     const accountCashIn = await transactionService.handleCashIn(
-      infoTransaction.userCashIn
+      infoTransaction.userCashIn,
     );
 
     try {
@@ -90,13 +90,13 @@ const transactionService = {
           },
           {
             transaction: t,
-          }
+          },
         );
         await accountCashIn?.increment(
           {
             balance: infoTransaction.value,
           },
-          { transaction: t }
+          { transaction: t },
         );
         return TransactionModel.create(
           {
@@ -104,7 +104,7 @@ const transactionService = {
             creditedAccountId: accountCashIn?.id,
             value: infoTransaction.value,
           },
-          { transaction: t }
+          { transaction: t },
         );
       });
 

@@ -1,7 +1,6 @@
 import { NextFunction, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import ErrorUnauthorized from '../errors/ErrorUnauthorized';
-import UserModel from '../database/models/UserModel';
 import IResponseToken from '../interfaces/IResponseToken';
 import IInfoUser from '../interfaces/IInfoUser';
 
@@ -16,15 +15,9 @@ const validateToken = async (
   if (!token) throw new ErrorUnauthorized('token not found');
 
   try {
-    const { accountId, userId } = jwt.verify(token, JWT_SECRET as string) as IInfoUser;
-    const user = await UserModel.findOne({
-      where: { id: userId },
-    });
+    const { userId } = jwt.verify(token, JWT_SECRET as string) as IInfoUser;
 
-    if (!user) {
-      throw new ErrorUnauthorized('User not found');
-    }
-    res.locals.user = { accountId, userId };
+    res.locals.user = { userId };
     next();
   } catch (error) {
     throw new ErrorUnauthorized('Token must be a valid token');

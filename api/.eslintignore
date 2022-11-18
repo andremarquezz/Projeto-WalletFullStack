@@ -1,0 +1,4 @@
+/build
+/src/database/**
+/src/tests
+jest.config.js

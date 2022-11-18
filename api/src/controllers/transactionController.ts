@@ -24,11 +24,7 @@ const transactionController = {
   createTransaction: async (req: Request, res: IResponseToken): Promise<void> => {
     const { userCashIn, value } = req.body;
     const { user } = res.locals;
-    const transaction = await transactionService.createTransaction({
-      userCashIn,
-      user,
-      value,
-    });
+    const transaction = await transactionService.createTransaction({ userCashIn, user, value });
     res.status(200).json(transaction);
   },
 };

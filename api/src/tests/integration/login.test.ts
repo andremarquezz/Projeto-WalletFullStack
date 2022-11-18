@@ -35,7 +35,7 @@ describe('<POST /login>', () => {
   });
 
   describe('When valid fields', () => {
-    it('Should return a status 200 with a JWT token when is valid credentials', async () => {
+    it('Should return a 200 status with a JWT token when the information is valid', async () => {
       const response = await request(app).post('/login').send({
         username: 'Admin',
         password: 'secret_admin',
