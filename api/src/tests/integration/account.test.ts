@@ -3,16 +3,6 @@ import jwt from 'jsonwebtoken';
 import app from '../../app';
 
 describe('<GET /account>', () => {
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  const spy = jest.spyOn(jwt, 'verify');
-  spy.mockReturnValue({
-    userId: '52',
-    document: '42780908890',
-    name: 'Vitor',
-  } as any);
 
   describe('When invalid fields', () => {
     it('Should return error 401 with a details message when missing token', async () => {
@@ -42,6 +32,7 @@ describe('<GET /account>', () => {
 
       token = response.body.token;
     });
+    
     it('Should return a 200 status with a JWT token when the information is valid', async () => {
       const response = await request(app).get('/account').set({ authorization: token });
 
@@ -53,3 +44,5 @@ describe('<GET /account>', () => {
     });
   });
 });
+
+
