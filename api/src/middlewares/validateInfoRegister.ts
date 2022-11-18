@@ -2,7 +2,7 @@ import { NextFunction, Request } from 'express';
 import UserModel from '../database/models/UserModel';
 import ErrorBadRequest from '../errors/ErrorBadRequest';
 import ErrorConflict from '../errors/ErrorConflict';
-import ILoginInfo from '../interfaces/ILoginInfo';
+import IInfoUser from '../interfaces/IInfoUser';
 import IResponseToken from '../interfaces/IResponseToken';
 
 const MIN_CHARACTER_USER = 3;
@@ -13,7 +13,7 @@ const validateInfoRegister = async (
   _res: IResponseToken,
   next: NextFunction,
 ): Promise<void> => {
-  const { username, password }: ILoginInfo = req.body;
+  const { username, password }: IInfoUser = req.body;
 
   if (!username || !password) {
     throw new ErrorBadRequest('username and password is required');

@@ -2,7 +2,7 @@ import { NextFunction, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import ErrorUnauthorized from '../errors/ErrorUnauthorized';
 import IResponseToken from '../interfaces/IResponseToken';
-import IInfoUser from '../interfaces/IInfoUser';
+import IUserId from '../interfaces/IUserId';
 
 const { JWT_SECRET } = process.env;
 
@@ -15,7 +15,7 @@ const validateToken = async (
   if (!token) throw new ErrorUnauthorized('token not found');
 
   try {
-    const { userId } = jwt.verify(token, JWT_SECRET as string) as IInfoUser;
+    const { userId } = jwt.verify(token, JWT_SECRET as string) as IUserId;
 
     res.locals.user = { userId };
     next();

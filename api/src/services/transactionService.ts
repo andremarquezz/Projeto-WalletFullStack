@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import IInfoUser from '../interfaces/IInfoUser';
+import IUserId from '../interfaces/IUserId';
 import AccountModel from '../database/models/AccountModel';
 import UserModel from '../database/models/UserModel';
 import TransactionModel from '../database/models/TransactionModel';
@@ -16,7 +16,7 @@ import IResponseTransaction from '../interfaces/IResponseTransaction';
 const transactionService = {
   getTransactions: async ({
     userId,
-  }: IInfoUser): Promise<IResponseTransaction[] | null> => {
+  }: IUserId): Promise<IResponseTransaction[] | null> => {
     const transactions = await TransactionModel.findAll({
       where: {
         [Op.or]: [{ debitedAccountId: userId }, { creditedAccountId: userId }],
@@ -27,7 +27,7 @@ const transactionService = {
 
   getTransactionsCashIn: async ({
     userId,
-  }: IInfoUser): Promise<IResponseTransaction[] | null> => {
+  }: IUserId): Promise<IResponseTransaction[] | null> => {
     const transactions = await TransactionModel.findAll({
       where: { creditedAccountId: userId },
     });
@@ -36,7 +36,7 @@ const transactionService = {
 
   getTransactionsCashOut: async ({
     userId,
-  }: IInfoUser): Promise<IResponseTransaction[] | null> => {
+  }: IUserId): Promise<IResponseTransaction[] | null> => {
     const transactions = await TransactionModel.findAll({
       where: { debitedAccountId: userId },
     });
@@ -79,7 +79,7 @@ const transactionService = {
   createTransaction: async (infoTransaction: IInfoTransaction) => {
     const accountCashOut = await transactionService.handleCashOut(infoTransaction);
     const accountCashIn = await transactionService.handleCashIn(
-      infoTransaction.userCashIn,
+      infoTransaction.userCashIn
     );
 
     try {
@@ -90,13 +90,13 @@ const transactionService = {
           },
           {
             transaction: t,
-          },
+          }
         );
         await accountCashIn?.increment(
           {
             balance: infoTransaction.value,
           },
-          { transaction: t },
+          { transaction: t }
         );
         return TransactionModel.create(
           {
@@ -104,7 +104,7 @@ const transactionService = {
             creditedAccountId: accountCashIn?.id,
             value: infoTransaction.value,
           },
-          { transaction: t },
+          { transaction: t }
         );
       });
 

@@ -1,3 +1,4 @@
 export default interface IInfoUser {
-  userId: number;
+  username: string;
+  password: string;
 }
