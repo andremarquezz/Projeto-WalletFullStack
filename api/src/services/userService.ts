@@ -33,14 +33,6 @@ const userService = {
   },
 
   register: async ({ username, password }: ILoginInfo): Promise<string> => {
-    console.log('chegou');
-
-    if (!username || !password) {
-      throw new ErrorBadRequest('username and password is required');
-    }
-
-    console.log('passou');
-
     const hashedPassword = hashPassword(password);
     try {
       const { dataValues } = await sequelize.transaction(async (t) => {
@@ -53,7 +45,7 @@ const userService = {
             password: hashedPassword,
             accountId,
           },
-          { transaction: t }
+          { transaction: t },
         );
         return user;
       });

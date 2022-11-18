@@ -7,7 +7,11 @@ import IInfoUser from '../interfaces/IInfoUser';
 
 const { JWT_SECRET } = process.env;
 
-const validateToken = async (req: Request, res: IResponseToken, next: NextFunction): Promise<void> => {
+const validateToken = async (
+  req: Request,
+  res: IResponseToken,
+  next: NextFunction,
+): Promise<void> => {
   const { authorization: token } = req.headers;
   if (!token) throw new ErrorUnauthorized('token not found');
 

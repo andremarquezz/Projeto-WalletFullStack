@@ -8,12 +8,12 @@ router.get('/transaction', validateToken, transactionController.getTransactionsA
 router.get(
   '/transaction/cashin',
   validateToken,
-  transactionController.getTransactionsCashIn
+  transactionController.getTransactionsCashIn,
 );
 router.get(
   '/transaction/cashout',
   validateToken,
-  transactionController.getTransactionsCashOut
+  transactionController.getTransactionsCashOut,
 );
 router.post('/transaction', validateToken, transactionController.createTransaction);
 

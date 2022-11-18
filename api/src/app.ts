@@ -1,11 +1,12 @@
 import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
+import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
 import IError from './interfaces/IError';
 import userRoutes from './routes/userRoutes';
 import accountRoutes from './routes/accountRoutes';
 import transactionRoutes from './routes/transactionRoutes';
-import cors from 'cors';
-import swaggerUi from 'swagger-ui-express';
+// eslint-disable-next-line import/extensions
 import swaggerDocs from './swagger.json';
 
 const app = express();
@@ -18,8 +19,8 @@ app.use(userRoutes);
 app.use(accountRoutes);
 app.use(transactionRoutes);
 
-app.use((err: IError, _req: Request, res: Response, _next: NextFunction) =>
-  res.status(err.code || 500).json({ error: err.message })
-);
+app.use((err: IError, _req: Request, res: Response, _next: NextFunction) => {
+  res.status(err.code || 500).json({ error: err.message });
+});
 
 export default app;
