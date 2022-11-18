@@ -9,7 +9,7 @@ const sequelize = {
 
 const resetDatabase = () => {
   shell.exec(
-    [sequelize.drop, sequelize.create, sequelize.migrate, sequelize.seed].join(' && ')
+    [sequelize.drop, sequelize.create, sequelize.migrate, sequelize.seed].join(' && '),
   );
 };
 

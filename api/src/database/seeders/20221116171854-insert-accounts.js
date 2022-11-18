@@ -1,8 +1,6 @@
-'use strict';
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface, _Sequelize) {
     await queryInterface.bulkInsert(
       'accounts',
       [
@@ -13,11 +11,11 @@ module.exports = {
           balance: 100,
         },
       ],
-      {}
+      {},
     );
   },
 
-  async down(queryInterface, Sequelize) {
-   await queryInterface.bulkDelete('accounts', null, {});
+  async down(queryInterface, _Sequelize) {
+    await queryInterface.bulkDelete('accounts', null, {});
   },
 };

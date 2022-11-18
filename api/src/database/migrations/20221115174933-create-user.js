@@ -1,5 +1,3 @@
-'use strict';
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -23,13 +21,13 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: 'accounts',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface, _Sequelize) {
     await queryInterface.dropTable('users');
   },
 };

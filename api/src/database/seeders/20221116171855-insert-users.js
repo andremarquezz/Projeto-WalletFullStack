@@ -1,8 +1,6 @@
-'use strict';
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, _Sequelize) {
     await queryInterface.bulkInsert(
       'users',
       [
@@ -19,11 +17,11 @@ module.exports = {
           // senha: secret_user
         },
       ],
-      {}
+      {},
     );
   },
 
-  async down (queryInterface, Sequelize) {
-     await queryInterface.bulkDelete('users', null, {});
-  }
+  async down(queryInterface, _Sequelize) {
+    await queryInterface.bulkDelete('users', null, {});
+  },
 };
