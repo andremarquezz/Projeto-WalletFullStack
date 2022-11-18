@@ -1,4 +1,5 @@
-import ILoginInfo from '../interfaces/ILoginInfo';
+import { Transaction } from 'sequelize';
+import IInfoUser from '../interfaces/IInfoUser';
 import UserModel from '../database/models/UserModel';
 import AccountModel from '../database/models/AccountModel';
 import generateToken from '../utils/generateToken';
@@ -8,9 +9,10 @@ import ErrorInternalServer from '../errors/ErrorInternalServer';
 import ErrorBadRequest from '../errors/ErrorBadRequest';
 import ErrorNotFound from '../errors/ErrorNotFound';
 import { compare, hashPassword } from '../utils/hashPassword';
+import ICreateUser from '../interfaces/ICreateUser';
 
 const userService = {
-  login: async ({ username, password }: ILoginInfo): Promise<string> => {
+  login: async ({ username, password }: IInfoUser): Promise<string> => {
     if (!username || !password) {
       throw new ErrorBadRequest('username and password is required');
     }
@@ -31,27 +33,45 @@ const userService = {
     return generateToken({ userId });
   },
 
-  register: async ({ username, password }: ILoginInfo): Promise<string> => {
-    const hashedPassword = hashPassword(password);
+  createAccount: async (t: Transaction): Promise<number> => {
+    const account = await AccountModel.create({ balance: 100 }, { transaction: t });
+    const accountId = account.getDataValue('id');
+    return accountId;
+  },
+
+  createUser: async ({
+    userToRegister,
+    accountId,
+    t,
+  }: ICreateUser): Promise<IUserCreated> => {
+    const hashedPassword = hashPassword(userToRegister.password);
+    const user = await UserModel.create(
+      {
+        username: userToRegister.username,
+        password: hashedPassword,
+        accountId,
+      },
+      { transaction: t },
+    );
+    return user;
+  },
+
+  register: async (userToRegister: IInfoUser): Promise<string> => {
     try {
       const { dataValues } = await sequelize.transaction(async (t) => {
-        const account = await AccountModel.create({ balance: 100 }, { transaction: t });
-        const accountId = account.getDataValue('id');
-
-        const user: IUserCreated = await UserModel.create(
-          {
-            username,
-            password: hashedPassword,
-            accountId,
-          },
-          { transaction: t },
-        );
-        return user;
+        const accountId = await userService.createAccount(t);
+        const userCreated = await userService.createUser({
+          userToRegister,
+          accountId,
+          t,
+        });
+        return userCreated;
       });
 
       const { id } = dataValues;
 
-      return await generateToken({ userId: id });
+      const token = await generateToken({ userId: id });
+      return token;
     } catch (error) {
       throw new ErrorInternalServer('Error to register user');
     }
