@@ -30,22 +30,25 @@ describe('<GET /account>', () => {
       expect(response.status).toBe(401);
       expect(response.body).toEqual({ error: 'Token must be a valid token' });
     });
+  });
+  describe('When valid fields', () => {
+    let token: any;
 
-    describe('When valid fields', () => {
-      it('Should return a 200 status with a JWT token when the information is valid', async () => {
-        const login = await request(app).post('/login').send({
-          username: 'Admin',
-          password: 'secret_admin',
-        });
-        const { token } = login.body;
+    beforeAll(async () => {
+      const response = await request(app).post('/login').send({
+        username: 'Admin',
+        password: 'secret_admin',
+      });
 
-        const response = await request(app).get('/account').set({ authorization: token });
+      token = response.body.token;
+    });
+    it('Should return a 200 status with a JWT token when the information is valid', async () => {
+      const response = await request(app).get('/account').set({ authorization: token });
 
-        expect(response.status).toBe(200);
-        // expect(response.body).toEqual({
-        //   id: 1,
-        //   balance: '100.00',
-        // });
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        id: 1,
+        balance: '100.00',
       });
     });
   });
