@@ -38,7 +38,7 @@ Users.init(
     sequelize: db,
     modelName: 'users',
     timestamps: false,
-  }
+  },
 );
 
 Accounts.hasOne(Users, {

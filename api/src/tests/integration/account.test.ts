@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import app from '../../app';

@@ -34,14 +34,14 @@ Transactions.init(
     createdAt: {
       type: DATE,
       allowNull: false,
-      defaultValue: new Date
+      defaultValue: new Date(),
     },
   },
   {
     sequelize: db,
     modelName: 'transactions',
     timestamps: false,
-  }
+  },
 );
 
 Accounts.hasMany(Transactions, {

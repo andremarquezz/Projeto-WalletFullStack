@@ -5,4 +5,4 @@ export default interface IUserCreated {
     password: string;
     accountId: number;
   };
-};
+}

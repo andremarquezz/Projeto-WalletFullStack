@@ -9,8 +9,7 @@ const jwtConfig: jwt.SignOptions = {
 
 const { JWT_SECRET } = process.env;
 
-const generateToken = async (infoUser: IInfoUser): Promise<string> => {
-  return jwt.sign(infoUser, JWT_SECRET as string, jwtConfig);
-};
+const generateToken = async (infoUser: IInfoUser): Promise<string> =>
+  jwt.sign(infoUser, JWT_SECRET as string, jwtConfig);
 
 export default generateToken;

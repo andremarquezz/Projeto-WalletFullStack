@@ -4,4 +4,4 @@ export default interface IInfoTransaction {
   user: {
     userId: number;
   };
-};
+}

@@ -6,7 +6,6 @@ import IError from './interfaces/IError';
 import userRoutes from './routes/userRoutes';
 import accountRoutes from './routes/accountRoutes';
 import transactionRoutes from './routes/transactionRoutes';
-// eslint-disable-next-line import/extensions
 import swaggerDocs from './swagger.json';
 
 const app = express();

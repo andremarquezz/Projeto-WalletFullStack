@@ -4,4 +4,4 @@ export default interface IResponseTransaction {
   creditedAccountId: number;
   value: number;
   createdAt: Date;
-};
+}

@@ -6,7 +6,6 @@ class Accounts extends Model {
   id!: number;
 
   balance!: string;
-
 }
 
 Accounts.init(
@@ -26,6 +25,6 @@ Accounts.init(
     sequelize: db,
     modelName: 'accounts',
     timestamps: false,
-  }
+  },
 );
 export default Accounts;

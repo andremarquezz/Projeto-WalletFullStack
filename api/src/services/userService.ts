@@ -51,7 +51,7 @@ const userService = {
 
       const { id } = dataValues;
 
-      return generateToken({ userId: id });
+      return await generateToken({ userId: id });
     } catch (error) {
       throw new ErrorInternalServer('Error to register user');
     }

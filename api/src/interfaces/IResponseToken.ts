@@ -6,4 +6,4 @@ export default interface IResponseToken extends Response {
       userId: number;
     };
   };
-};
+}
