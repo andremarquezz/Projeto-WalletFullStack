@@ -69,7 +69,7 @@ const transactionService = {
 
     return accountCashOut;
   },
-  handleAccountCashIn: async (userCashIn: string): Promise<IResponseAccount | null> => {
+  findAccountCashIn: async (userCashIn: string): Promise<IResponseAccount | null> => {
     const user = await UserModel.findOne({
       where: { username: userCashIn },
       attributes: ['accountId'],
@@ -98,7 +98,7 @@ const transactionService = {
     infoTransaction,
     t,
   }: ITransaction): Promise<IResponseAccount | null> => {
-    const accountCashIn = await transactionService.handleAccountCashIn(
+    const accountCashIn = await transactionService.findAccountCashIn(
       infoTransaction.userCashIn,
     );
     await accountCashIn?.increment(
@@ -109,21 +109,31 @@ const transactionService = {
     );
     return accountCashIn;
   },
+  registerTransaction: async (
+    transaction: ITransaction,
+  ): Promise<IResponseTransaction> => {
+    const accountCashOut = await transactionService.handleDebited(transaction);
+    const accountCashIn = await transactionService.handleCredited(transaction);
+    const { infoTransaction, t } = transaction;
+    const registeredTransaction = await TransactionModel.create(
+      {
+        debitedAccountId: accountCashOut?.id,
+        creditedAccountId: accountCashIn?.id,
+        value: infoTransaction.value,
+      },
+      { transaction: t },
+    );
+    return registeredTransaction;
+  },
 
-  createTransaction: async (infoTransaction: IInfoTransaction) => {
+  handleTransaction: async (
+    infoTransaction: IInfoTransaction,
+  ): Promise<IResponseTransaction> => {
     try {
-      const transaction = await sequelize.transaction(async (t: Transaction) => {
-        const accountCashOut = await transactionService.handleDebited({ infoTransaction, t });
-        const accountCashIn = await transactionService.handleCredited({ infoTransaction, t });
-        TransactionModel.create(
-          {
-            debitedAccountId: accountCashOut?.id,
-            creditedAccountId: accountCashIn?.id,
-            value: infoTransaction.value,
-          },
-          { transaction: t },
-        );
-      });
+      const transaction = await sequelize.transaction(
+        async (t: Transaction): Promise<IResponseTransaction> =>
+          transactionService.registerTransaction({ infoTransaction, t }),
+      );
       return transaction;
     } catch (error) {
       throw new ErrorInternalServer('Error when performing transaction');
