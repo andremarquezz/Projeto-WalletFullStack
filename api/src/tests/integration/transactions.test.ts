@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../../app';
 import TransactionModel from '../../database/models/TransactionModel';
-import { transaction } from './mocks/mockTransaction';
+import { createdTransaction, transaction } from './mocks/mockTransaction';
 import IResponseTransaction from '../../interfaces/IResponseTransaction';
 
 const createToken = async () => {
@@ -79,15 +79,23 @@ describe('< POST /transaction>', () => {
       token = await createToken();
     });
 
-    it('Should return status 200 and an array containing transaction information', async () => {
-      const spyTransaction = jest.spyOn(TransactionModel, 'findAll');
-      spyTransaction.mockReturnValue(transaction);
+    it('Should return status 200 and an object containing valid information', async () => {
       const response = await request(app)
-        .get('/transaction')
+        .post('/transaction')
+        .send({
+          userCashIn: 'User',
+          value: 5,
+        })
         .set({ authorization: token });
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(expect.arrayContaining(transaction));
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          ...createdTransaction,
+          createdAt: response.body.createdAt,
+          id: response.body.id,
+        })
+      );
     });
   });
 });

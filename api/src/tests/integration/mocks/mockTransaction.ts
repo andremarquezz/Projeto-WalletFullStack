@@ -7,3 +7,9 @@ export const transaction = [
     value: 5,
   },
 ] as any;
+
+export const createdTransaction = {
+  debitedAccountId: 1,
+  creditedAccountId: 2,
+  value: 5,
+};
