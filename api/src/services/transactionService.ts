@@ -13,6 +13,8 @@ import IResponseAccount from '../interfaces/IResponseAccount';
 import accountService from './accountService';
 import IResponseTransaction from '../interfaces/IResponseTransaction';
 import ITransaction from '../interfaces/ITransaction';
+import IError from '../interfaces/IError';
+import ErrorCustom from '../errors/ErrorCustom';
 
 const transactionService = {
   getTransactions: async ({
@@ -136,7 +138,8 @@ const transactionService = {
       );
       return transaction;
     } catch (error) {
-      throw new ErrorInternalServer('Error when performing transaction');
+      const err = error as IError;
+      throw new ErrorCustom(err.message, err.code);
     }
   },
 };
