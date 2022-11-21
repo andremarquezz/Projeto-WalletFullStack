@@ -51,7 +51,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "Incorrect username"
+                      "example": "username and password is required"
                     }
                   }
                 }
@@ -68,6 +68,22 @@
                     "error": {
                       "type": "string",
                       "example": "Incorrect password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Incorrect username"
                     }
                   }
                 }
@@ -108,6 +124,22 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/errorsToRegister"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "username already exists"
+                    }
+                  }
                 }
               }
             }
@@ -444,10 +476,6 @@
             "example": "password must be at least 8 characters"
           },
           "error3": {
-            "type": "string",
-            "example": "username already exists"
-          },
-          "error4": {
             "type": "string",
             "example": "The password must have at least one uppercase, lowercase letter and number"
           }
