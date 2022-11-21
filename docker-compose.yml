@@ -1,5 +1,18 @@
-version: "3.9"
-services: 
+version: '3.9'
+services:
+  frontend:
+    container_name: frontend_ngcash
+    build: ./web
+    volumes:
+      - ./web:/app-frontend/
+    ports:
+      - 3000:3000
+    working_dir: /app-frontend
+    depends_on:
+      api:
+        condition: service_healthy
+    command: npm run start
+
   api:
     container_name: api_ngcash
     build: ./api
@@ -20,14 +33,17 @@ services:
       - DB_PORT=5432
     ports:
       - 3001:3001
-  db: 
+    healthcheck:
+      test: ['CMD', 'lsof', '-t', '-i:3001']
+      timeout: 10s
+      retries: 5
+  db:
     container_name: db_ngcash
     image: postgres:10.17
     restart: 'unless-stopped'
     environment:
-    - POSTGRES_USER=root
-    - POSTGRES_PASSWORD=123456
-    - POSTGRES_DB=ngcash_db 
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=ngcash_db
     ports:
       - 5432:5432
-   
