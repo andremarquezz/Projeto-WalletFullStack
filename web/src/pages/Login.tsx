@@ -1,26 +1,14 @@
 import { AxiosError } from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import IUser from '../interfaces/IUser';
 import { authenticationUser } from '../services/user';
 
 export default function Login() {
-  const [{ username, password }, setUser] = useState({ username: '', password: '' });
-  const [disableBtnLogin, setDisableBtnLogin] = useState(true);
-  const [alert, setAlert] = useState('');
+  const [{ username, password }, setUser] = useState<IUser>({ username: '', password: '' });
+  const [alert, setAlert] = useState<string>('');
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const MIN_LENGTH_USERNAME = 3;
-    const validateInputs = () => {
-      const regexPassword = /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}/gm;
-      if (regexPassword.test(password) && username.length >= MIN_LENGTH_USERNAME) {
-        return setDisableBtnLogin(false);
-      }
-      return setDisableBtnLogin(true);
-    };
-    validateInputs();
-  }, [username, password]);
 
   const newSession = async () => {
     const ERROR_NOT_FOUND = 404;
@@ -32,7 +20,6 @@ export default function Login() {
       navigate('/account');
     } catch (error) {
       const err = error as AxiosError;
-
       switch (err.response?.status) {
         case ERROR_NOT_FOUND:
           return setAlert('Usuário não encontrado!');
@@ -67,12 +54,12 @@ export default function Login() {
             onChange={(event) => setUser({ username, password: event.target.value })}
           />
         </label>
-        <button type="button"  disabled={disableBtnLogin} onClick={newSession}>
+        <button type="button" onClick={newSession}>
           Entrar
         </button>
       </form>
       <button type="button" onClick={() => navigate('/register')}>
-        Registrar
+        Criar conta
       </button>
       {alert && <p>{alert}</p>}
     </div>
