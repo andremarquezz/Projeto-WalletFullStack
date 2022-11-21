@@ -12,7 +12,6 @@ services:
       api:
         condition: service_healthy
     command: npm run start
-
   api:
     container_name: api_ngcash
     build: ./api

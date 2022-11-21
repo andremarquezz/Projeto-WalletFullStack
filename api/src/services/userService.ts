@@ -10,6 +10,7 @@ import ErrorBadRequest from '../errors/ErrorBadRequest';
 import ErrorNotFound from '../errors/ErrorNotFound';
 import { compare, hashPassword } from '../utils/hashPassword';
 import ICreateUser from '../interfaces/ICreateUser';
+import ErrorUnauthorized from '../errors/ErrorUnauthorized';
 
 const userService = {
   login: async ({ username, password }: IInfoUser): Promise<string> => {
@@ -28,7 +29,7 @@ const userService = {
     const userId = userDb.getDataValue('id');
 
     const validPassword = compare(password, userDbPassword);
-    if (!validPassword) throw new ErrorBadRequest('Incorrect password');
+    if (!validPassword) throw new ErrorUnauthorized('Incorrect password');
 
     return generateToken({ userId });
   },
