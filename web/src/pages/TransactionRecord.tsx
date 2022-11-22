@@ -36,30 +36,42 @@ export default function TransactionRecord() {
   return (
     <div>
       <Navbar />
-      <h1>Registro de transações</h1>
-      <div>
-        <h3>Tipos de transação</h3>
-        <select
-          name="selectOperation"
-          onChange={({ target }) => fetchTransaction(target.value)}
-        >
-          <option value="all">Todas</option>
-          <option value="cashIn">Operações de entrada</option>
-          <option value="cashOut">Operações de saida</option>
-        </select>
+      <div className="form-group d-flex flex-column justify-content-center m-2 align-items-center">
+        <h1>Registro de transações</h1>
+        <div>
+          <h4>Tipos de transação</h4>
+          <select
+            name="selectOperation"
+            className="custom-select custom-select-sm"
+            onChange={({ target }) => fetchTransaction(target.value)}
+          >
+            <option value="all">Todas</option>
+            <option value="cashIn">Operações de entrada</option>
+            <option value="cashOut">Operações de saida</option>
+          </select>
+        </div>
       </div>
-
-      {transactions &&
-        transactions.map((transaction) => (
-          <Link to={`/account/record/${transaction.id}`}>
-            <h3>Id da transferência: {transaction.id}</h3>
-            <h4>
-              Data da transferência:{' '}
-              {moment(new Date(transaction.createdAt)).format('DD/MM/YYYY')}
-            </h4>
-            <p>Valor: {transaction.value}</p>
-          </Link>
-        ))}
+      <div className="d-flex flex-wrap justify-content-center">
+        {transactions &&
+          transactions.map((transaction) => (
+            <div className="card m-2">
+              <div className="card-body">
+                <h5 className="card-title">Id da transferência: {transaction.id}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">
+                  Data da transferência:{' '}
+                  {moment(new Date(transaction.createdAt)).format('DD/MM/YYYY')}
+                </h6>
+                <p className="card-text">Valor: {`R$ ${transaction.value}`}</p>
+                <Link
+                  to={`/account/record/${transaction.id}`}
+                  className="card-link text-center "
+                >
+                  <button className="btn btn-outline-dark">Detalhes da operação</button>
+                </Link>
+              </div>
+            </div>
+          ))}
+      </div>
     </div>
   );
 }
