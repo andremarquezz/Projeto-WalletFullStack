@@ -34,14 +34,15 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form>
+    <div className="form-group d-flex flex-column justify-content-center m-5">
+      <h1 className="text-center p-2">Login</h1>
+      <form className="form-group d-flex flex-column align-items-center mx-auto">
         <label htmlFor="username">
           <input
             type="text"
             placeholder="Usuário"
             name="username"
+            className="form-control w-100 mx-auto m-2"
             id="username"
             onChange={(event) => setUser({ username: event.target.value, password })}
             value={username}
@@ -51,16 +52,25 @@ export default function Login() {
           <input
             type="password"
             name="password"
+            className="form-control w-100 mx-auto m-2"
             id="password"
             placeholder="Senha"
             onChange={(event) => setUser({ username, password: event.target.value })}
           />
         </label>
-        <button type="button" onClick={newSession}>
+        <button
+          className="btn btn-outline-primary m-2"
+          type="button"
+          onClick={newSession}
+        >
           Entrar
         </button>
       </form>
-      <button type="button" onClick={() => navigate('/register')}>
+      <button
+        type="button"
+        className="btn btn-outline-dark mx-auto"
+        onClick={() => navigate('/register')}
+      >
         Criar conta
       </button>
       {alert && <p>{alert}</p>}
