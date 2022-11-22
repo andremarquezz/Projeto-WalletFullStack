@@ -147,6 +147,40 @@
         }
       }
     },
+    "/user/:id": {
+      "get": {
+        "summary": "Endpoint que retorna o nome do usuário",
+        "description": "Este endpoint retorna o < username > do usuário passado por parâmetro",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "Id do usuário",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "string",
+                      "example": "Admin"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/account": {
       "get": {
         "summary": "Endpoint que retorna informações da conta do usuário",
@@ -212,7 +246,7 @@
                   "properties": {
                     "error": {
                       "type": "string",
-                      "example": "'User does not exist'"
+                      "example": "User does not exist"
                     }
                   }
                 }
