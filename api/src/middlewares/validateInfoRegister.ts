@@ -8,13 +8,7 @@ import IResponseToken from '../interfaces/IResponseToken';
 const MIN_CHARACTER_USER = 3;
 const MIN_CHARACTER_PASS = 8;
 
-const validateInfoRegister = async (
-  req: Request,
-  _res: IResponseToken,
-  next: NextFunction,
-): Promise<void> => {
-  const { username, password }: IInfoUser = req.body;
-
+const rulesForRegistration = async ({ username, password }: IInfoUser): Promise<void> => {
   if (!username || !password) {
     throw new ErrorBadRequest('username and password is required');
   }
@@ -31,6 +25,15 @@ const validateInfoRegister = async (
     },
   });
   if (userExists) throw new ErrorConflict('username already exists');
+};
+
+const validateInfoRegister = async (
+  req: Request,
+  _res: IResponseToken,
+  next: NextFunction,
+): Promise<void> => {
+  const { username, password }: IInfoUser = req.body;
+  await rulesForRegistration({ username, password });
 
   const regex = /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}/gm;
 
