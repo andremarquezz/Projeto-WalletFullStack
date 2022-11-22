@@ -34,9 +34,9 @@ const userService = {
     return generateToken({ userId });
   },
 
-  findUser: async (userId: string): Promise<string> => {
+  findUser: async (userId: string): Promise<string | null> => {
     const user = await UserModel.findByPk(userId);
-    const username = user?.getDataValue('username')
+    const username = user?.getDataValue('username');
     return username;
   },
 

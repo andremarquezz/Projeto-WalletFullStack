@@ -65,6 +65,15 @@ const transactionService = {
     return transactions;
   },
 
+  findAccountCashIn: async (userCashIn: string): Promise<IResponseAccount | null> => {
+    const user = await UserModel.findOne({
+      where: { username: userCashIn },
+      attributes: ['accountId'],
+    });
+
+    return AccountModel.findByPk(user?.accountId);
+  },
+
   handleAccountCashOut: async ({
     userCashIn,
     user: userCashOut,
@@ -89,14 +98,6 @@ const transactionService = {
     }
 
     return accountCashOut;
-  },
-  findAccountCashIn: async (userCashIn: string): Promise<IResponseAccount | null> => {
-    const user = await UserModel.findOne({
-      where: { username: userCashIn },
-      attributes: ['accountId'],
-    });
-
-    return AccountModel.findByPk(user?.accountId);
   },
 
   handleDebited: async ({

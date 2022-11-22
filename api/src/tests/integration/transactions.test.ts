@@ -59,7 +59,7 @@ describe('< POST /transaction>', () => {
       expect(response.status).toBe(401);
       expect(response.body).toEqual({ error: 'token not found' });
     });
-    it('Should return error 500 with a message of details when not finding userCashIn', async () => {
+    it('Should return error 400 with a message of details when not finding userCashIn', async () => {
       const response = await request(app)
         .post('/transaction')
         .send({
@@ -68,8 +68,34 @@ describe('< POST /transaction>', () => {
         })
         .set({ authorization: token });
 
-      expect(response.status).toBe(500);
-      expect(response.body).toEqual({ error: 'Error when performing transaction' });
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({ error: 'User does not exist' });
+    });
+    it("Should return error 401 with a detail message when you don't have enough balance", async () => {
+      const response = await request(app)
+        .post('/transaction')
+        .send({
+          userCashIn: 'User',
+          value: 99999,
+        })
+        .set({ authorization: token });
+
+      expect(response.status).toBe(401);
+      expect(response.body).toEqual({ error: 'Balance insufficient' });
+    });
+    it('Should return 409 error with detail message when user cashIn is same as cashOut', async () => {
+      const response = await request(app)
+        .post('/transaction')
+        .send({
+          userCashIn: 'Admin',
+          value: 5,
+        })
+        .set({ authorization: token });
+
+      expect(response.status).toBe(409);
+      expect(response.body).toEqual({
+        error: 'It is not possible to transfer to the same account',
+      });
     });
   });
   describe('When valid fields', () => {
