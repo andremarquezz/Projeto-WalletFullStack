@@ -32,8 +32,6 @@ export default function Account() {
     fetchBalance();
   }, [balance]);
 
-
-
   const handleTransaction = async () => {
     try {
       const response = await createTransaction({ userCashIn, value });
@@ -41,7 +39,7 @@ export default function Account() {
       setUserReceived(userCashIn);
       setBalance(balance);
       setTransaction(response);
-      setTextAlert('')
+      setTextAlert('');
     } catch (error) {
       const err = error as AxiosError;
       switch (err.response?.status) {
@@ -59,44 +57,54 @@ export default function Account() {
 
   return (
     <div>
-      <Navbar />
-      <p>Saldo: {balance}</p>
-      <div>
-        <h3>Realizar transferência</h3>
+      <div className="d-flex justify-content-around navbar navbar-expand-lg navbar-light bg-light">
+        <p className="navbar-brand mx-2">Saldo: {balance}</p>
+        <Navbar />
+      </div>
+      <div className="form-group d-flex flex-column justify-content-center m-4">
+        <h3 className="mx-auto">Realizar transferência</h3>
         <label htmlFor="userCashIn">
           <input
             type="text"
             name="userCashIn"
+            className="form-control w-25 mx-auto m-2"
             placeholder="Transferir para"
             onChange={(event) =>
               setInfoTransaction({ userCashIn: event.target.value, value })
             }
           />
         </label>
-        <label htmlFor="valueCashIn">
-          <input
-            type="number"
-            name="valueCashIn"
-            placeholder="Valor da transferência"
-            onChange={(event) =>
-              setInfoTransaction({ userCashIn, value: event.target.value })
-            }
-          />
-        </label>
-        <button onClick={handleTransaction}>Transferir</button>
+        <div className="form-group d-flex flex-column justify-content-center">
+          <label htmlFor="valueCashIn">
+            <input
+              className="form-control w-25 mx-auto m-2"
+              type="number"
+              name="valueCashIn"
+              placeholder="Valor da transferência"
+              onChange={(event) =>
+                setInfoTransaction({ userCashIn, value: event.target.value })
+              }
+            />
+          </label>
+        </div>
+        <button className="btn btn-primary mx-auto m-2" onClick={handleTransaction}>
+          Transferir
+        </button>
 
-        {textAlert && <p>{textAlert}</p>}
+        {textAlert && <p className="alert alert-warning mx-auto m-1">{textAlert}</p>}
       </div>
       {transaction && (
-        <div>
-          <h2>Transferência Realizada!</h2>
-          <p>Id da transação: {transaction.id}</p>
-          <p>Nome do Recebedor: {userReceived}</p>
-          <p>
-            Data da transferência:{' '}
-            {moment(new Date(transaction.createdAt)).format('DD/MM/YYYY')}
-          </p>
-          <p>Valor: {transaction.value}</p>
+        <div className="card text-justify mx-auto align-items-center w-50 text-center">
+          <h2 className="card-header w-100 ">Transferência Realizada!</h2>
+          <ul className="list-group list-group-flus w-100">
+            <li className="list-group-item">Id da transação: {transaction.id}</li>
+            <li className="list-group-item">Nome do Recebedor: {userReceived}</li>
+            <li className="list-group-item">
+              Data da transferência:{' '}
+              {moment(new Date(transaction.createdAt)).format('DD/MM/YYYY')}
+            </li>
+            <li className="list-group-item">Valor: {`R$ ${transaction.value}`}</li>
+          </ul>
         </div>
       )}
     </div>
