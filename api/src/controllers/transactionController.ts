@@ -9,9 +9,10 @@ const transactionController = {
     res.status(200).json(transactions);
   },
 
-  getTransaction: async (req: Request, res: IResponseToken): Promise<void> => {
-    const { id } = req.params
-    const transaction = await transactionService.getTransaction(id);
+  getTransactionOne: async (req: Request, res: IResponseToken): Promise<void> => {
+    const { id } = req.params;
+    const { user } = res.locals;
+    const transaction = await transactionService.getTransactionOne({ id, user });
     res.status(200).json(transaction);
   },
 

@@ -1,8 +1,13 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 import ITransaction from '../interfaces/ITransaction';
-import { getAllTransactions } from '../services/account';
+import {
+  getAllTransactions,
+  getTransactionsCashIn,
+  getTransactionsCashOut,
+} from '../services/account';
 
 export default function TransactionRecord() {
   const [transactions, setTransactions] = useState<ITransaction[]>();
@@ -15,27 +20,31 @@ export default function TransactionRecord() {
     allTransactions();
   }, []);
 
-  const cashInTransactions = async () => {
-    const response = await cashInTransactions();
-    setTransactions(response);
-  };
-  const cashOutTransactions = async () => {
-    const response = await cashInTransactions();
-    setTransactions(response);
+  const fetchTransaction = async (value: string) => {
+    switch (value) {
+      case 'all':
+        return setTransactions(await getAllTransactions());
+      case 'cashIn':
+        return setTransactions(await getTransactionsCashIn());
+      case 'cashOut':
+        return setTransactions(await getTransactionsCashOut());
+      default:
+        break;
+    }
   };
 
   return (
     <div>
+      <Navbar />
       <h1>Registro de transações</h1>
       <div>
         <h3>Tipos de transação</h3>
-        <select name="selectOperation">
-          <option value="all" selected>
-            Todas
-          </option>
-          <option value="cashIn" onClick={}>
-            Operações de entrada
-          </option>
+        <select
+          name="selectOperation"
+          onChange={({ target }) => fetchTransaction(target.value)}
+        >
+          <option value="all">Todas</option>
+          <option value="cashIn">Operações de entrada</option>
           <option value="cashOut">Operações de saida</option>
         </select>
       </div>

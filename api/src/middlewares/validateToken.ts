@@ -16,7 +16,6 @@ const validateToken = async (
 
   try {
     const { userId } = jwt.verify(token, JWT_SECRET as string) as IUserId;
-
     res.locals.user = { userId };
     next();
   } catch (error) {

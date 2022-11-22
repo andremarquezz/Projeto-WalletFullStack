@@ -8,13 +8,13 @@ import sequelize from '../database/models';
 import ErrorUnauthorized from '../errors/ErrorUnauthorized';
 import ErrorBadRequest from '../errors/ErrorBadRequest';
 import ErrorConflict from '../errors/ErrorConflict';
-import ErrorInternalServer from '../errors/ErrorInternalServer';
 import IResponseAccount from '../interfaces/IResponseAccount';
 import accountService from './accountService';
 import IResponseTransaction from '../interfaces/IResponseTransaction';
 import ITransaction from '../interfaces/ITransaction';
 import IError from '../interfaces/IError';
 import ErrorCustom from '../errors/ErrorCustom';
+import IOneTransaction from '../interfaces/IOneTransaction';
 
 const transactionService = {
   getTransactionsAll: async ({
@@ -27,8 +27,23 @@ const transactionService = {
     });
     return transactions;
   },
-  getTransaction: async (id: string): Promise<IResponseTransaction | null> => {
-    const transaction = await TransactionModel.findByPk(id);
+  getTransactionOne: async ({
+    id,
+    user,
+  }: IOneTransaction): Promise<IResponseTransaction | null> => {
+    const transaction = await TransactionModel.findOne({
+      where: {
+        [Op.and]: [
+          { id },
+          {
+            [Op.or]: [
+              { debitedAccountId: user.userId },
+              { creditedAccountId: user.userId },
+            ],
+          },
+        ],
+      },
+    });
     return transaction;
   },
 
@@ -95,7 +110,7 @@ const transactionService = {
       },
       {
         transaction: t,
-      }
+      },
     );
     return accountCashOut;
   },
@@ -105,18 +120,18 @@ const transactionService = {
     t,
   }: ITransaction): Promise<IResponseAccount | null> => {
     const accountCashIn = await transactionService.findAccountCashIn(
-      infoTransaction.userCashIn
+      infoTransaction.userCashIn,
     );
     await accountCashIn?.increment(
       {
         balance: infoTransaction.value,
       },
-      { transaction: t }
+      { transaction: t },
     );
     return accountCashIn;
   },
   registerTransaction: async (
-    transaction: ITransaction
+    transaction: ITransaction,
   ): Promise<IResponseTransaction> => {
     const accountCashOut = await transactionService.handleDebited(transaction);
     const accountCashIn = await transactionService.handleCredited(transaction);
@@ -127,18 +142,18 @@ const transactionService = {
         creditedAccountId: accountCashIn?.id,
         value: infoTransaction.value,
       },
-      { transaction: t }
+      { transaction: t },
     );
     return registeredTransaction;
   },
 
   handleTransaction: async (
-    infoTransaction: IInfoTransaction
+    infoTransaction: IInfoTransaction,
   ): Promise<IResponseTransaction> => {
     try {
       const transaction = await sequelize.transaction(
         async (t: Transaction): Promise<IResponseTransaction> =>
-          transactionService.registerTransaction({ infoTransaction, t })
+          transactionService.registerTransaction({ infoTransaction, t }),
       );
       return transaction;
     } catch (error) {

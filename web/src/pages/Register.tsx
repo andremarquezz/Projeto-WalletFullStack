@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IUser from '../interfaces/IUser';
 import { registerUser } from '../services/user';
+import ERROR from '../utils/typesErrors';
 
 export default function Register() {
   const [{ username, password }, setUser] = useState<IUser>({ username: '', password: '' });
@@ -24,9 +25,6 @@ export default function Register() {
   }, [username, password]);
 
   const createUser = async () => {
-    const ERROR_BAD_REQUEST = 400;
-    const ERROR_CONFLICT = 409;
-
     try {
       const response = await registerUser({ username, password });
       localStorage.setItem('user', JSON.stringify(response));
@@ -35,9 +33,9 @@ export default function Register() {
       const err = error as AxiosError;
 
       switch (err.response?.status) {
-        case ERROR_BAD_REQUEST:
+        case ERROR.BAD_REQUEST:
           return setAlert('Você deve inserir informações validas!');
-        case ERROR_CONFLICT:
+        case ERROR.CONFLICT:
           return setAlert('Este nome de usuário já existe!');
         default:
           return setAlert('Problema ao criar conta, tente novamente!');

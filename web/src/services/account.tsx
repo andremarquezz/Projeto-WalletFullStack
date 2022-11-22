@@ -11,7 +11,7 @@ export const getBalance = async (): Promise<IBalance> => {
   return response.data;
 };
 
-export const fetchTransaction = async (
+export const createTransaction = async (
   infoTransaction: IInfoTransaction
 ): Promise<ITransaction> => {
   const userStorage = JSON.parse(localStorage.getItem('user') || '');
@@ -29,10 +29,29 @@ export const getAllTransactions = async (): Promise<ITransaction[]> => {
   return response.data;
 };
 
-export const getTransaction = async (id: string | undefined): Promise<ITransaction> => {
+export const getOneTransaction = async (
+  id: string | undefined
+): Promise<ITransaction> => {
   const userStorage = JSON.parse(localStorage.getItem('user') || '');
   api.defaults.headers.authorization = userStorage.token;
 
   const response = await api.get(`/transaction/${id}`);
+  return response.data;
+};
+
+export const getTransactionsCashIn = async (): Promise<ITransaction[]> => {
+  const userStorage = JSON.parse(localStorage.getItem('user') || '');
+  api.defaults.headers.authorization = userStorage.token;
+
+  const response = await api.get('/transaction/cashin');
+  
+  return response.data;
+};
+
+export const getTransactionsCashOut = async (): Promise<ITransaction[]> => {
+  const userStorage = JSON.parse(localStorage.getItem('user') || '');
+  api.defaults.headers.authorization = userStorage.token;
+
+  const response = await api.get('/transaction/cashout');
   return response.data;
 };

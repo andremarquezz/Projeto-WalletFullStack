@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IUser from '../interfaces/IUser';
 import { authenticationUser } from '../services/user';
+import ERROR from '../utils/typesErrors';
 
 export default function Login() {
   const [{ username, password }, setUser] = useState<IUser>({
@@ -14,8 +15,6 @@ export default function Login() {
   const navigate = useNavigate();
 
   const newSession = async () => {
-    const ERROR_NOT_FOUND = 404;
-    const ERROR_UNAUTHORIZED = 401;
 
     try {
       const response = await authenticationUser({ username, password });
@@ -24,9 +23,9 @@ export default function Login() {
     } catch (error) {
       const err = error as AxiosError;
       switch (err.response?.status) {
-        case ERROR_NOT_FOUND:
+        case ERROR.NOT_FOUND:
           return setAlert('Usuário não encontrado!');
-        case ERROR_UNAUTHORIZED:
+        case ERROR.UNAUTHORIZED:
           return setAlert('Senha incorreta!');
         default:
           return setAlert('Aconteceu algum problema, tente novamente!');

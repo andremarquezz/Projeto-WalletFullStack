@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
-import { getBalance, fetchTransaction } from '../services/account';
+import { getBalance, createTransaction } from '../services/account';
 import ITransaction from '../interfaces/ITransaction';
 import IInfoTransaction from '../interfaces/IInfoTransaction';
 import { AxiosError } from 'axios';
@@ -15,7 +15,7 @@ export default function Account() {
     value: '',
   });
   const [transaction, setTransaction] = useState<ITransaction>();
-  const [alert, setAlert] = useState<string>('');
+  const [textAlert, setTextAlert] = useState<string>('');
   const [userReceived, setUserReceived] = useState<string>('');
   const navigate = useNavigate();
 
@@ -32,24 +32,27 @@ export default function Account() {
     fetchBalance();
   }, [balance]);
 
+
+
   const handleTransaction = async () => {
     try {
-      const response = await fetchTransaction({ userCashIn, value });
+      const response = await createTransaction({ userCashIn, value });
       const { balance } = await getBalance();
       setUserReceived(userCashIn);
       setBalance(balance);
       setTransaction(response);
+      setTextAlert('')
     } catch (error) {
       const err = error as AxiosError;
       switch (err.response?.status) {
         case ERROR.BAD_REQUEST:
-          return setAlert('Usuário não encontrado!');
+          return setTextAlert('Usuário não encontrado!');
         case ERROR.UNAUTHORIZED:
-          return setAlert('Saldo Insuficiente!');
+          return setTextAlert('Saldo Insuficiente!');
         case ERROR.CONFLICT:
-          return setAlert('Não é possivel transferir para a mesma conta!');
+          return setTextAlert('Não é possivel transferir para a mesma conta!');
         default:
-          return setAlert('Aconteceu algum problema, tente novamente!');
+          return setTextAlert('Aconteceu algum problema, tente novamente!');
       }
     }
   };
@@ -82,7 +85,7 @@ export default function Account() {
         </label>
         <button onClick={handleTransaction}>Transferir</button>
 
-        {alert && <p>{alert}</p>}
+        {textAlert && <p>{textAlert}</p>}
       </div>
       {transaction && (
         <div>
