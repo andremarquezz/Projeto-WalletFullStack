@@ -6,7 +6,10 @@ import { registerUser } from '../services/user';
 import ERROR from '../utils/typesErrors';
 
 export default function Register() {
-  const [{ username, password }, setUser] = useState<IUser>({ username: '', password: '' });
+  const [{ username, password }, setUser] = useState<IUser>({
+    username: '',
+    password: '',
+  });
   const [disableBtnLogin, setDisableBtnLogin] = useState<boolean>(true);
   const [alert, setAlert] = useState<string>('');
 
@@ -44,7 +47,7 @@ export default function Register() {
   };
 
   return (
-    <div>
+    <div className="form-group d-flex flex-column justify-content-center m-5 align-items-center">
       <h1>Criar conta</h1>
       <div>
         <ul>
@@ -57,26 +60,43 @@ export default function Register() {
       </div>
       <div></div>
       <form>
-        <label htmlFor="username">
+        <div className="input-group input-group-sm mb-3 d-flex">
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="username">
+              Usuário
+            </span>
+          </div>
           <input
+            className="form-control"
             type="text"
-            placeholder="Usuário"
+            placeholder=""
             name="username"
             id="username"
             onChange={(event) => setUser({ username: event.target.value, password })}
             value={username}
           />
-        </label>
-        <label htmlFor="password">
+        </div>
+        <div className="input-group input-group-sm mb-4">
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="password">
+              Senha
+            </span>
+          </div>
           <input
+            className="form-control"
             type="password"
             name="password"
             id="password"
             placeholder="Senha"
             onChange={(event) => setUser({ username, password: event.target.value })}
           />
-        </label>
-        <button type="button" disabled={disableBtnLogin} onClick={createUser}>
+        </div>
+        <button
+          type="button"
+          className="btn btn-outline-success"
+          disabled={disableBtnLogin}
+          onClick={createUser}
+        >
           Criar conta
         </button>
       </form>
