@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ITransaction from '../interfaces/ITransaction';
 import { getOneTransaction } from '../services/account';
@@ -33,19 +33,29 @@ export default function TransactionRecordDetails() {
   return (
     <div>
       <Navbar />
-      {transaction && (
-        <div>
-          <h1>Registro da transação</h1>
-          <h3>Id da transferência: {transaction.id}</h3>
-          <h4>
-            Data da transferência:{' '}
-            {moment(new Date(transaction.createdAt)).format('DD/MM/YYYY')}
-          </h4>
-          <p>Valor: {transaction.value}</p>
-          <p>Usuario Debitado: {userDebited}</p>
-          <p>Usuario Creditado: {userCredited}</p>
-        </div>
-      )}
+      <div className="form-group d-flex flex-column justify-content-center m-2 align-items-center">
+        <h1>Informações da transação</h1>
+        <Link to={'/account/record'}>
+          <button className="btn btn-outline-dark">Voltar</button>
+        </Link>
+        {transaction && (
+          <div className="card m-4">
+            <div className="card-body">
+              <h5 className="card-title">Id da transferência: {transaction.id}</h5>
+              <p className="card-text">
+                {' '}
+                Data da transferência:{' '}
+                {moment(new Date(transaction.createdAt)).format('DD/MM/YYYY')}
+              </p>
+            </div>
+            <ul className="list-group list-group-flush">
+              <li className="list-group-item">Valor: {transaction.value}</li>
+              <li className="list-group-item">Usuario Debitado: {userDebited}</li>
+              <li className="list-group-item">Usuario Creditado: {userCredited}</li>
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
