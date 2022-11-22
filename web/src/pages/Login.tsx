@@ -5,7 +5,10 @@ import IUser from '../interfaces/IUser';
 import { authenticationUser } from '../services/user';
 
 export default function Login() {
-  const [{ username, password }, setUser] = useState<IUser>({ username: '', password: '' });
+  const [{ username, password }, setUser] = useState<IUser>({
+    username: '',
+    password: '',
+  });
   const [alert, setAlert] = useState<string>('');
 
   const navigate = useNavigate();

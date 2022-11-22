@@ -17,7 +17,7 @@ import IError from '../interfaces/IError';
 import ErrorCustom from '../errors/ErrorCustom';
 
 const transactionService = {
-  getTransactions: async ({
+  getTransactionsAll: async ({
     userId,
   }: IUserId): Promise<IResponseTransaction[] | null> => {
     const transactions = await TransactionModel.findAll({
@@ -26,6 +26,10 @@ const transactionService = {
       },
     });
     return transactions;
+  },
+  getTransaction: async (id: string): Promise<IResponseTransaction | null> => {
+    const transaction = await TransactionModel.findByPk(id);
+    return transaction;
   },
 
   getTransactionsCashIn: async ({
@@ -91,7 +95,7 @@ const transactionService = {
       },
       {
         transaction: t,
-      },
+      }
     );
     return accountCashOut;
   },
@@ -101,18 +105,18 @@ const transactionService = {
     t,
   }: ITransaction): Promise<IResponseAccount | null> => {
     const accountCashIn = await transactionService.findAccountCashIn(
-      infoTransaction.userCashIn,
+      infoTransaction.userCashIn
     );
     await accountCashIn?.increment(
       {
         balance: infoTransaction.value,
       },
-      { transaction: t },
+      { transaction: t }
     );
     return accountCashIn;
   },
   registerTransaction: async (
-    transaction: ITransaction,
+    transaction: ITransaction
   ): Promise<IResponseTransaction> => {
     const accountCashOut = await transactionService.handleDebited(transaction);
     const accountCashIn = await transactionService.handleCredited(transaction);
@@ -123,18 +127,18 @@ const transactionService = {
         creditedAccountId: accountCashIn?.id,
         value: infoTransaction.value,
       },
-      { transaction: t },
+      { transaction: t }
     );
     return registeredTransaction;
   },
 
   handleTransaction: async (
-    infoTransaction: IInfoTransaction,
+    infoTransaction: IInfoTransaction
   ): Promise<IResponseTransaction> => {
     try {
       const transaction = await sequelize.transaction(
         async (t: Transaction): Promise<IResponseTransaction> =>
-          transactionService.registerTransaction({ infoTransaction, t }),
+          transactionService.registerTransaction({ infoTransaction, t })
       );
       return transaction;
     } catch (error) {

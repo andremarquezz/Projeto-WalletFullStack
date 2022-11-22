@@ -5,8 +5,14 @@ import transactionService from '../services/transactionService';
 const transactionController = {
   getTransactionsAll: async (_req: Request, res: IResponseToken): Promise<void> => {
     const { user } = res.locals;
-    const transactions = await transactionService.getTransactions(user);
+    const transactions = await transactionService.getTransactionsAll(user);
     res.status(200).json(transactions);
+  },
+
+  getTransaction: async (req: Request, res: IResponseToken): Promise<void> => {
+    const { id } = req.params
+    const transaction = await transactionService.getTransaction(id);
+    res.status(200).json(transaction);
   },
 
   getTransactionsCashIn: async (_req: Request, res: IResponseToken): Promise<void> => {

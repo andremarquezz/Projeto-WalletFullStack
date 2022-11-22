@@ -5,7 +5,7 @@ export default function Navbar() {
     <div>
       <nav>
         <Link to={'/account'}>Realizar Transação</Link>
-        <Link to={'/account/transactionMade'}>Transações Feitas</Link>
+        <Link to={'/account/record'}>Transações Feitas</Link>
         <Link to="/login" onClick={() => localStorage.removeItem('user')}>
           Sair
         </Link>

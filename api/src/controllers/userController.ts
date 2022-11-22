@@ -13,6 +13,11 @@ const userController = {
     const token = await userService.register({ username, password });
     res.status(201).json({ token });
   },
+  findUser: async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    const user = await userService.findUser(id);
+    res.status(200).json({ user });
+  },
 };
 
 export default userController;

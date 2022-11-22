@@ -34,6 +34,12 @@ const userService = {
     return generateToken({ userId });
   },
 
+  findUser: async (userId: string): Promise<string> => {
+    const user = await UserModel.findByPk(userId);
+    const username = user?.getDataValue('username')
+    return username;
+  },
+
   createAccount: async (t: Transaction): Promise<number> => {
     const account = await AccountModel.create({ balance: 100 }, { transaction: t });
     const accountId = account.getDataValue('id');

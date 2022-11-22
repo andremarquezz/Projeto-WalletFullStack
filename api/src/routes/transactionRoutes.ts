@@ -5,6 +5,7 @@ import validateToken from '../middlewares/validateToken';
 const router = Router();
 
 router.get('/transaction', validateToken, transactionController.getTransactionsAll);
+router.get('/transaction/:id', validateToken, transactionController.getTransaction);
 router.get(
   '/transaction/cashin',
   validateToken,
