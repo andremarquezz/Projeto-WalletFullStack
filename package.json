@@ -4,7 +4,8 @@
   "description": "Desafio Tecnico NgCash",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently \"cd api && npm start\" \"cd web && npm start\"",
+    "installDeps": "concurrently \"cd api && npm install\" \"cd web && npm install\""
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,6 @@
   },
   "homepage": "https://github.com/andremarquezz/Desafio-NgCash#readme",
   "devDependencies": {
-
+    "concurrently": "^7.6.0"
   }
 }
