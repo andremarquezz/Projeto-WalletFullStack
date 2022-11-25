@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import 'express-async-errors';
 import IUserId from '../interfaces/IUserId';
+import 'dotenv/config'
 
 const jwtConfig: jwt.SignOptions = {
   expiresIn: '24h',

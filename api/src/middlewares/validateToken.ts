@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import ErrorUnauthorized from '../errors/ErrorUnauthorized';
 import IResponseToken from '../interfaces/IResponseToken';
 import IUserId from '../interfaces/IUserId';
+import 'dotenv/config'
 
 const { JWT_SECRET } = process.env;
 
