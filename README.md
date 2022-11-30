@@ -37,8 +37,6 @@ O projeto foi desenvolvido em containers docker utilizando a imagem node:16.14-a
 
 - **[Express](http://expressjs.com/pt-br/)**
 
-- **[Express](http://expressjs.com/pt-br/)**
-
 - **[React](https://pt-br.reactjs.org/)**
 
   > Veja o arquivo [package.json do backEnd](https://github.com/andremarquezz/Desafio-NgCash/blob/main/api/package.json)
