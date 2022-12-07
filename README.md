@@ -1,7 +1,7 @@
 <img src="https://img.shields.io/github/issues/andremarquezz/Desafio-NgCash"/> <img src="https://img.shields.io/github/forks/andremarquezz/Desafio-NgCash"/> <img src="https://img.shields.io/github/stars/andremarquezz/Desafio-NgCash"/>
 
-<h1 align="center">Aplicação Web FullStack Ng.Cash</h1>
-<p align="center">Aplicação onde usuários da NG consigam realizar transferências internas entre si.!</p>
+<h1 align="center">Aplicação Web FullStack</h1>
+<p align="center">Aplicação onde os usuários consigam realizar transferências internas entre si.!</p>
 
 # Sumário
 
@@ -21,8 +21,8 @@
 
 ---
 
-<p>Uma aplicação desenvolvida durante a etapa tecnica da empresa Ng.Cash, o objetivo da aplicação é possibilitar que usuários da NG consigam realizar transferências internas entre si.
-O projeto foi desenvolvido em containers docker utilizando a imagem node:16.14-alpine e uma imagem postgres:10.17, foi utilizado a arquitetura MSC, para realizar as requisições, exceto login e registro, é necessario estar autenticado com um token JWT.
+<p>O objetivo da aplicação é possibilitar que usuários consigam realizar transferências internas entre si.
+O projeto foi desenvolvido em containers docker utilizando a imagem node:16.14-alpine e uma imagem postgres:10.17, foi utilizado a arquitetura MSC, para realizar as requisições, é necessario estar autenticado com um token JWT, exceto login e registro.
 </p>
 
 ---
