@@ -75,7 +75,7 @@ Além disto é bom ter um editor para trabalhar com o código como [VSCode](http
 _1- Clonar o repositorio_
 
 ```jsx
-git@github.com:andremarquezz/Desafio-NgCash.git
+https://github.com/andremarquezz/Projeto-WalletFullStack
 ```
 
 ---
