@@ -75,7 +75,7 @@ Além disto é bom ter um editor para trabalhar com o código como [VSCode](http
 _1- Clonar o repositorio_
 
 ```jsx
-https://github.com/andremarquezz/Projeto-WalletFullStack
+git@github.com:andremarquezz/Projeto-WalletFullStack.git
 ```
 
 ---
