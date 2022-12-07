@@ -93,14 +93,14 @@ _Rode o serviço `node e postgreSQL` com o comando_
 docker-compose up -d
 ```
 
-- Esse serviço irá inicializar dois containers chamados `db_ngcash e api_ngcash `, respectivamente.
+- Esse serviço irá inicializar três containers chamados `frontend, api, db `.
   - A partir daqui você pode acessar o website pois a aplicação já esta online.
 
 - Caso queira acessar o terminal do container :
 
 _Via CLI use o comando_
 ```jsx
-docker exec -it api_ngcash bash
+docker exec -it api bash
 ```
 - Ele te dará acesso ao terminal interativo do container api_ngcash (node) criado pelo compose, que está rodando em segundo plano.
 
