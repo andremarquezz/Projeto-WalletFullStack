@@ -102,7 +102,7 @@ _Via CLI use o comando_
 ```jsx
 docker exec -it api bash
 ```
-- Ele te dará acesso ao terminal interativo do container api_ngcash (node) criado pelo compose, que está rodando em segundo plano.
+- Ele te dará acesso ao terminal interativo do container api (node) criado pelo compose, que está rodando em segundo plano.
 
 ⚠️Atenção: Caso opte por utilizar o Docker, TODOS os scripts disponíveis no package.json devem ser executados DENTRO do container, ou seja, no terminal que aparece após a execução do comando docker exec.
   
