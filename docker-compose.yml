@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   frontend:
-    container_name: frontend_ngcash
+    container_name: frontend
     build: ./web
     volumes:
       - ./web:/app-frontend/
@@ -16,7 +16,7 @@ services:
       - REACT_APP_PORT_API=3001
 
   api:
-    container_name: api_ngcash
+    container_name: api
     build: ./api
     working_dir: /app-backend
     volumes:
@@ -31,7 +31,7 @@ services:
       - DB_USER=root
       - DB_PASS=123456
       - DB_HOST=db
-      - DB_DATABASE=ngcash_db
+      - DB_DATABASE=database
       - DB_PORT=5432
     ports:
       - 3001:3001
@@ -40,12 +40,12 @@ services:
       timeout: 10s
       retries: 5
   db:
-    container_name: db_ngcash
+    container_name: db
     image: postgres:10.17
     restart: 'unless-stopped'
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=ngcash_db
+      - POSTGRES_DB=database
     ports:
       - 5432:5432
